@@ -10,7 +10,7 @@ This document serves as the complete definition of Google's Android coding stand
 
 Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
 
-_<a href="changelog.html">Last update: {{ site.changes.first.date | date: "%Y-%m-%d" }}</a>_
+_<a href="changelog.html">Last update: {{ site.changes.last.date | date: "%Y-%m-%d" }}</a>_
 
 # Source files
 
@@ -18,7 +18,7 @@ All source files must be encoded as UTF-8.
 
 ## Naming
 
-If a source file contains only a single top-level class, the file name should reflect the case-sensitive name plus the `.kt` extension. Otherwise, if a source file contains multiple top-level declarations, choose a name the describes the contents of the file, apply PascalCase, and append the `.kt` extension.
+If a source file contains only a single top-level class, the file name should reflect the case-sensitive name plus the `.kt` extension. Otherwise, if a source file contains multiple top-level declarations, choose a name that describes the contents of the file, apply PascalCase, and append the `.kt` extension.
 
 ```kotlin
 // Foo.kt
@@ -39,7 +39,7 @@ fun <T, O> List<T>.map(func: (T) -> O): List<O> = // …
 
 Aside from the line terminator sequence, the **ASCII horizontal space character (0x20)** is the only whitespace character that appears anywhere in a source file. This implies that:
 
- 1. All other whitespace characters in string and characters literals are escaped.
+ 1. All other whitespace characters in string and character literals are escaped.
  2. Tab characters are **not** used for indentation.
 
 ### Special escape sequences
@@ -53,14 +53,14 @@ For the remaining non-ASCII characters, either the actual Unicode character (e.g
 | **Example**                        | **Discussion**                                                           |
 |------------------------------------|--------------------------------------------------------------------------|
 | `val unitAbbrev = "μs"`            | Best: perfectly clear even without a comment.                            |
-| `val unitAbbrev = "\u03bcs" // μs` | Poor: there's no reason to use an escape with a printable character      |
+| `val unitAbbrev = "\u03bcs" // μs` | Poor: there's no reason to use an escape with a printable character.     |
 | `val unitAbbrev = "\u03bcs"`       | Poor: the reader has no idea what this is.                               |
-| `return "\ufeff" + content`        | Good: use escapes for non-printable characters, and comment if necessary |
+| `return "\ufeff" + content`        | Good: use escapes for non-printable characters, and comment if necessary.|
 
 
 ## Structure
 
-A `.kt` file comprises of the following, in order:
+A `.kt` file comprises the following, in order:
 
 1. Copyright and/or license header (optional)
 2. File-level annotations
@@ -99,7 +99,7 @@ Do not use a [KDoc-style](https://kotlinlang.org/docs/reference/kotlin-doc.html)
 
 ### File-level annotations
 
-Annotations with the 'file' [use-site target]() are placed between any header comment and the package declaration.
+Annotations with the 'file' [use-site target](https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets) are placed between any header comment and the package declaration.
 
 ### Package statement
 
@@ -247,7 +247,7 @@ Exceptions:
 
 * Lines where obeying the column limit is not possible (for example, a long URL in KDoc)
 * `package` and `import` statements
-* Command lines in a comment that may be cut-and-pasted into a shell.
+* Command lines in a comment that may be cut-and-pasted into a shell
 
 ### Where to break
 
@@ -260,7 +260,7 @@ The prime directive of line-wrapping is: prefer to break at a **higher syntactic
  2. When a line is broken at an _assignment_ operator the break comes _after_ the symbol.
  3. A method or constructor name stays attached to the open parenthesis (`(`) that follows it.
  4. A comma (`,`) stays attached to the token that precedes it.
- 5. A lambda arrow (`->`) stays attached to the argument list what precedes it.
+ 5. A lambda arrow (`->`) stays attached to the argument list that precedes it.
 
 Note: The primary goal for line wrapping is to have clear code, _not necessarily_ code that fits in the smallest number of lines.
 
@@ -273,13 +273,13 @@ When there are multiple continuation lines, indentation may be varied beyond +8 
 
 ### Functions
 
-When a function signature does not fit on a single line, break each parameter declaration onto its own line. Parameters defined in this format should use a continuation indent (+8). The closing parenthesis (`)`) and return type are placed on their own line with no additional indent.
+When a function signature does not fit on a single line, break each parameter declaration onto its own line. Parameters defined in this format should use a single indent (+4). The closing parenthesis (`)`) and return type are placed on their own line with no additional indent.
 
 ```kotlin
 fun <T> Iterable<T>.joinToString(
-        separator: CharSequence = ", ",
-        prefix: CharSequence = "",
-        postfix: CharSequence = ""
+    separator: CharSequence = ", ",
+    prefix: CharSequence = "",
+    postfix: CharSequence = ""
 ): String {
     // …
 }
@@ -309,10 +309,10 @@ private val defaultCharset: Charset? =
         EncodingRegistry.getInstance().getDefaultCharsetForPropertiesFiles(file)
 ```
 
-Properties declaring a `get` and/or `set` function should place each on their only line with a normal indent (+4). Format them using the same rules as functions.
+Properties declaring a `get` and/or `set` function should place each on their own line with a normal indent (+4). Format them using the same rules as functions.
 
 ```kotlin
-val directory: File? = null
+var directory: File? = null
     set(value) {
         // …
     }
@@ -339,7 +339,7 @@ A single blank line appears:
 
  2. Between statements, as _needed_ to organize the code into logical subsections.
 
- 3. _Optionally_ before the first statement in a function, or before the first member of after the last member of a class (neither encourage nor discouraged).
+ 3. _Optionally_ before the first statement in a function, before the first member of a class, or after the last member of a class (neither encouraged nor discouraged).
 
  4. As required by other sections of this document (Such as the ["Structure"](#structure) section).
 
@@ -349,7 +349,7 @@ Multiple consecutive blank lines are permitted, but not encouraged or ever requi
 
 Beyond where required by the language or other style rules, and apart from literals, comments, and KDoc, a single ASCII space also appears in the following places only:
 
- 1. Separating any reserved word, such as `if`, `for`, or `catch` from an open parenthesis (`(`) the follows it on that line.
+ 1. Separating any reserved word, such as `if`, `for`, or `catch` from an open parenthesis (`(`) that follows it on that line.
 
     ```kotlin
     // WRONG!
@@ -436,7 +436,18 @@ Beyond where required by the language or other style rules, and apart from liter
         it.toString()
         ```
 
- 5. Before a colon (`:`) only if used in a class decalration for specifying a base class / interfaces or when used in a `where` clause for [generic constraints](https://kotlinlang.org/docs/reference/generics.html#generic-constraints).
+    *  the range operator (`..`).
+
+        ```kotlin
+        // WRONG
+        for (i in 1 .. 4) print(i)
+        ```
+        ```kotlin
+        // Okay
+        for (i in 1..4) print(i)
+        ```
+
+ 5. Before a colon (`:`) only if used in a class declaration for specifying a base class / interfaces or when used in a `where` clause for [generic constraints](https://kotlinlang.org/docs/reference/generics.html#generic-constraints).
 
     ```kotlin
     // WRONG!
@@ -445,6 +456,15 @@ Beyond where required by the language or other style rules, and apart from liter
     ```kotlin
     // Okay
     class Foo : Runnable
+    ```
+    
+    ```kotlin
+    // WRONG
+    fun <T: Comparable> max(a: T, b: T)
+    ```
+    ```kotlin
+    // Okay
+    fun <T : Comparable> max(a: T, b: T)
     ```
 
     ```kotlin
@@ -487,7 +507,7 @@ Beyond where required by the language or other style rules, and apart from liter
     var debugging = false // disabled by default
     ```
 
-This rule is never interpreted as required or forbidding additional space at the start or end of a line; it addresses only interior space.
+This rule is never interpreted as requiring or forbidding additional space at the start or end of a line; it addresses only interior space.
 
 
 ## Specific constructs
@@ -583,7 +603,7 @@ package com.example.deep_space
 
 ## Type names
 
-Class names are written in PascalCase and are typically nouns or noun phrases. For example, `Character` or `ImmutableList`. Interface names may also be nouns or noun phrases (for example, `List`), but my sometimes be adjectives or adjective phrases instead (for example `Readable`).
+Class names are written in PascalCase and are typically nouns or noun phrases. For example, `Character` or `ImmutableList`. Interface names may also be nouns or noun phrases (for example, `List`), but may sometimes be adjectives or adjective phrases instead (for example `Readable`).
 
 Test classes are named starting with the name of the class they are testing, and ending with `Test`. For example, `HashTest` or `HashIntegrationTest`.
 
@@ -617,7 +637,7 @@ val EMPTY_ARRAY = arrayOf<SomeMutableType>()
 
 These names are typically nouns or noun phrases.
 
-Constant values can only be defined in side of an `object` or as a top-level declaration. Values otherwise meeting the requirement of a constant but defined inside of a `class` must use a non-constant name.
+Constant values can only be defined inside of an `object` or as a top-level declaration. Values otherwise meeting the requirement of a constant but defined inside of a `class` must use a non-constant name.
 
 Constants which are scalar values must use the [`const` modifier](http://kotlinlang.org/docs/reference/properties.html#compile-time-constants).
 
@@ -659,13 +679,13 @@ val table: Map<String, Int>
 
 Each type variable is named in one of two styles:
 
- 1. A single capital letter, optionally followed but a single numeral (such as `E`, `T`, `X`, `T2`)
+ 1. A single capital letter, optionally followed by a single numeral (such as `E`, `T`, `X`, `T2`)
  2. A name in the form used for classes, followed by the capital letter `T` (such as `RequestT`, `FooBarT`)
 
 
 ## Camel case
 
-Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" of "iOS" are present. To improve predictability, use the following scheme.
+Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" or "iOS" are present. To improve predictability, use the following scheme.
 
 Beginning with the prose form of the name:
 
@@ -685,7 +705,7 @@ Beginning with the prose form of the name:
 
 Note that the casing of the original words is almost entirely disregarded.
 
-| **Prose form**         | **Correct**                             | **Incorect**        |
+| **Prose form**         | **Correct**                             | **Incorrect**       |
 |------------------------|-----------------------------------------|---------------------|
 | "XML Http Request"     | `XmlHttpRequest`                        | `XMLHTTPRequest`    |
 | "new customer ID"      | `newCustomerId`                         | `newCustomerID`     |
